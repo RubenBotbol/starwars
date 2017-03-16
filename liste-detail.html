@@ -1,0 +1,165 @@
+<html>
+<head>
+    <style type="text/css">
+        div {
+            border: solid black 1px;
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            font-size: 1.3em;
+            border-radius: 10px;
+            border-style: solid;
+            border-color: #FFFC00 #000000;
+        }
+
+        .selected {
+            color:blue;
+        }
+        
+         .selected {
+             color: blue;
+         }
+    </style>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/javascript" src="react/react.js"></script>
+    <script type="text/javascript" src="react/JSXTransformer.js"></script>
+    <script type="text/javascript">
+    
+    var letters = [{
+  'author': 'Yoda',
+  'quote' : 'When 900 years old, you reach… Look as good, you will not.'
+  'image' : 'Yoda.jpg'
+}, {
+  'author': 'Senator palpatine',
+  'quote' : 'The Dark Side of the Force is the pathway to many abilities some consider to be.. Unnatural.'
+  'image' : 'SenPalpa.jpg' 
+}, {
+  'author': 'Count Dooku',
+  'quote' : 'I sense great fear in you, Skywalker. You have hate… you have anger… but you don’t use them.'
+  'image' : 'CountDooku.jpg' 
+}, {
+  'author': 'Darth vader',
+  'quote' : 'Luke, you can destroy the Emperor. He has foreseen this. It is your destiny. Join me, and together we can rule the galaxy as father and son.'
+  'image' : 'darth-vader.jpg' 
+}, {
+  'author': 'Princess leila',
+  'quote' : 'Aren\'t you a little short for a storm trooper ? '
+  'image' : 'PrincesseLeia.jpg' 
+}, {
+  'author': 'Yoda',
+  'quote' : 'Mmm. Lost a planet, Master Obi-Wan has. How embarrassing.'
+  'image' : 'Yoda.jpg'
+}, {
+  'author': 'Qui-Gon Jinn',
+  'quote' : 'Your focus determines your reality'
+  'image' : 'Qui-Gon-Jinn.jpg' 
+}, {
+  'author': 'Yoda',
+  'quote' : 'Do. Or do not. There is no try.'
+  'image' : 'Yoda.jpg' 
+}, {
+  'author': 'Obi-Wan-Kenobi',
+  'quote' : 'In my experience there is no such thing as luck.'
+  'image' : 'Obi-wan.jpg'
+}, {
+  'author': 'Yoda',
+  'quote' : 'If once you start down the dark side, forever will it dominate your destiney, consume you it will, as it did Obi-Wan\'s apprentice'
+  'image' :'Yoda.jpg' 
+}, {
+  'author': 'Darth Vader',
+  'quote' : 'The Force is strong with this one.'
+  'image' : 'darth-vader.jpg'
+}];
+
+                        
+    </script>
+    
+    <script type="text/jsx">
+
+    var rString = ""
+
+    var Tree =  React.createClass({
+        render : function () {
+            return (<div>
+                <Letters onLetterSelected={this.selectLetter}/>
+                <Score letter={this.state.letter}/>
+            </div>);
+        },
+
+        getInitialState : function() {
+            return{
+                letter : ''
+            }
+        },
+
+        selectLetter : function (newLetter) {
+            return this.setState({letter : newLetter});
+        }
+    });
+
+    var Letters = React.createClass({
+
+        render : function () {
+            var handler = this.props.onLetterSelected;
+
+            return (<div>
+                {letters.map(function(item) {
+                    return <Letter itemValue={item} whenClick={handler} />;
+                })}
+            </div>);
+        },
+
+    });
+
+    var Letter = React.createClass({
+
+        render : function () {
+            var classname = this.state.selected ? 'selected' : '';
+            return (<div className={classname} onClick={this.handleClick}><img src={this.props.itemValue.image} width="100" height="100"/></div>);
+        },
+
+        getInitialState : function () {
+            return {selected : false };
+        },
+
+        handleClick : function () {
+            rString = randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            this.props.whenClick(this.props.itemValue);
+            //this.setState({selected : true});
+        }
+    });
+              
+
+    var Score = React.createClass({
+
+        render : function () {
+            return  (<div>
+                Le personnage a dit : {this.props.letter.quote} 
+            </div>);
+        },
+
+    });
+
+     var Random = React.createClass({
+          render : function () {
+              return (<div> Random: {rString} </div>);
+         },
+      });
+
+
+    React.render(<Tree />, document.getElementById('root'));
+
+    function randomString(length, chars) {
+         var result = '';
+          for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+          return result;
+        }
+
+    </script>
+</body>
+</html>
